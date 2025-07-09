@@ -1,0 +1,25 @@
+---
+- name: Configure an apache web server on EC2 instance and display a homepage
+  hosts: Ansible-Managed-Node-2
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Install apache2 package
+      ansible.builtin.apt:
+        name: apache2
+        state: present
+        update_cache: true
+    
+    - name: Copy website files to /var/www/html
+      ansible.builtin.copy:
+        src: website/
+        dest: /var/www/html/
+        owner: www-data
+        group: www-data
+        mode: '0644'
+
+    - name: Ensure apache2 service is running and enabled
+      ansible.builtin.service:
+        name: apache2
+        state: reloaded
