@@ -7,12 +7,6 @@ pipeline {
         AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
     }
 
-    stages {
-        stage('Checkout Code') {
-            steps {
-                git credentialsId: 'liewgzh', url: 'https://github.com/liewgzh/devops-bakery-website.git'
-            }
-        }
 
         stage('Terraform Init/Apply') {
             steps {
