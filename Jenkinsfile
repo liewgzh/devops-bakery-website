@@ -2,11 +2,9 @@ pipeline {
     agent any
 
     environment {
-        AWS_DEFAULT_REGION = 'us-east-1' // or your region
-    }
-
-    tools {
-        terraform 'terraform' // you may have to configure this in Jenkins tool config
+        AWS_DEFAULT_REGION = 'us-east-1'
+        AWS_ACCESS_KEY_ID     = credentials('aws-access-key-id')
+        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
     }
 
     stages {
@@ -26,6 +24,8 @@ pipeline {
                         passwordVariable: 'AWS_SECRET_ACCESS_KEY'
                     )
                     ]) {
+                        sh 'echo $AWS_ACCESS_KEY_ID'
+                        sh 'echo $AWS_SECRET_ACCESS_KEY'
                         sh '''
                             terraform init -upgrade
                             terraform plan
