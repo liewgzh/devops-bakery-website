@@ -73,7 +73,6 @@ EOF
                 '''
             }
         }
-    }
 
     post {
         success {
