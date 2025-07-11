@@ -47,3 +47,4 @@ ssh -i ~/.ssh/nodekey.pem -o StrictHostKeyChecking=no ubuntu@$CONTROLLER_IP << '
 EOF
 
 echo "✅ Deployment complete! Visit: http://$NODE2_IP"
+#test
