@@ -1,0 +1,37 @@
+pipeline {
+    agent any
+
+    environment {
+        AWS_DEFAULT_REGION = 'us-east-1'
+    }
+
+    stages {
+        stage('Terraform Destroy') {
+            steps {
+                dir('terraform') {
+                    withCredentials([
+                        usernamePassword(
+                            credentialsId: 'aws-credentials',
+                            usernameVariable: 'AWS_ACCESS_KEY_ID',
+                            passwordVariable: 'AWS_SECRET_ACCESS_KEY'
+                        )
+                    ]) {
+                        sh '''
+                            terraform init -upgrade -input=false
+                            terraform destroy -auto-approve
+                        '''
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "✅ Infrastructure destroyed successfully"
+        }
+        failure {
+            echo "❌ Terraform destroy failed"
+        }
+    }
+}
