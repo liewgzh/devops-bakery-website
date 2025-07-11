@@ -108,11 +108,3 @@ resource "local_file" "private_key" {
   content  = tls_private_key.example.private_key_pem
   file_permission = "0400"
 }
-
-terraform {
-  backend "s3" {
-    bucket = "devops-bakery-terraform-state-gordonliew1"
-    key    = "env/dev/terraform.tfstate"
-    region = "us-east-1"
-  }
-}
