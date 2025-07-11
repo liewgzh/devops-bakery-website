@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Terraform Destroy') {
             steps {
-                dir('terraform') {
+                dir('../Bakery-Deploy/terraform') {
                     withCredentials([
                         usernamePassword(
                             credentialsId: 'aws-credentials',
