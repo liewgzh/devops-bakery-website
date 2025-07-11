@@ -17,7 +17,7 @@ pipeline {
                         )
                     ]) {
                         sh '''
-                            terraform init -upgrade -input=false
+                            terraform init -upgrade
                             terraform plan -input=false -out=tfplan
                             terraform apply -auto-approve
                         '''
