@@ -3,23 +3,19 @@ pipeline {
 
     environment {
         AWS_DEFAULT_REGION = 'us-east-1'
-        AWS_ACCESS_KEY_ID     = credentials('aws-access-key-id')
-        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
     }
 
-
+    stages {
         stage('Terraform Init/Apply') {
             steps {
                 dir('terraform') {
                     withCredentials([
-                    usernamePassword(
-                        credentialsId: 'aws-credentials',
-                        usernameVariable: 'AWS_ACCESS_KEY_ID',
-                        passwordVariable: 'AWS_SECRET_ACCESS_KEY'
-                    )
+                        usernamePassword(
+                            credentialsId: 'aws-credentials',
+                            usernameVariable: 'AWS_ACCESS_KEY_ID',
+                            passwordVariable: 'AWS_SECRET_ACCESS_KEY'
+                        )
                     ]) {
-                        sh 'echo $AWS_ACCESS_KEY_ID'
-                        sh 'echo $AWS_SECRET_ACCESS_KEY'
                         sh '''
                             terraform init -upgrade
                             terraform plan
@@ -73,6 +69,7 @@ EOF
                 '''
             }
         }
+    }
 
     post {
         success {
