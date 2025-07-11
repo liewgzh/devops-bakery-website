@@ -3,6 +3,8 @@ pipeline {
 
     environment {
         AWS_DEFAULT_REGION = 'us-east-1'
+        AWS_ACCESS_KEY_ID     = credentials('aws-access-key-id')
+        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
     }
 
     stages {
@@ -17,8 +19,8 @@ pipeline {
                         )
                     ]) {
                         sh '''
-                            terraform init -upgrade
-                            terraform plan
+                            terraform init -upgrade -input=false
+                            terraform plan -input=false -out=tfplan
                             terraform apply -auto-approve
                         '''
                     }

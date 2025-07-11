@@ -76,17 +76,17 @@ resource "aws_instance" "control_node" {
   }
 }
 
-resource "aws_instance" "managed_node_1" {
-  ami                         = var.ami
-  instance_type               = var.instance_type
-  subnet_id                   = aws_subnet.ansible_subnet.id
-  key_name                    = aws_key_pair.deployer.key_name
-  vpc_security_group_ids      = [aws_security_group.ansible_sg.id]
-  associate_public_ip_address = true
-  tags = {
-    Name = "Ansible-Managed-Node-1"
-  }
-}
+# resource "aws_instance" "managed_node_1" {
+#   ami                         = var.ami
+#   instance_type               = var.instance_type
+#   subnet_id                   = aws_subnet.ansible_subnet.id
+#   key_name                    = aws_key_pair.deployer.key_name
+#   vpc_security_group_ids      = [aws_security_group.ansible_sg.id]
+#   associate_public_ip_address = true
+#   tags = {
+#     Name = "Ansible-Managed-Node-1"
+#   }
+# }
 
 resource "aws_instance" "managed_node_2" {
   ami                         = var.ami
