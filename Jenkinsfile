@@ -29,6 +29,7 @@ pipeline {
         stage('Copy Keys & Setup Inventory') {
             steps {
                 sh '''
+                    mkdir -p ~/.ssh
                     mv -f terraform/nodekey.pem ~/.ssh/nodekey.pem
                     chmod 400 ~/.ssh/nodekey.pem
                 '''
