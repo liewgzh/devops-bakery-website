@@ -3,6 +3,11 @@
 <head>
   <title>Gordon's Bakery</title>
   <link rel="stylesheet" href="styles/main.css">
+  <style>
+    #breadList li {
+      margin: 5px 0;
+    }
+  </style>
 </head>
 <body>
   <nav>
@@ -11,7 +16,30 @@
     <a href="about.html">About Us</a>
   </nav>
 
-  <h1>List of breads</h1>
+  <h1>List of Breads</h1>
+
+  <input type="text" id="searchInput" placeholder="Search for a bread..." onkeyup="filterBreads()">
+
+  <ul id="breadList">
+    <li>Sourdough</li>
+    <li>Whole Wheat</li>
+    <li>Rye</li>
+    <li>Ciabatta</li>
+    <li>Baguette</li>
+    <li>Brioche</li>
+    <li>Pita</li>
+    <li>Focaccia</li>
+  </ul>
+
+  <script>
+    function filterBreads() {
+      const input = document.getElementById('searchInput').value.toLowerCase();
+      const items = document.querySelectorAll('#breadList li');
+      items.forEach(item => {
+        item.style.display = item.textContent.toLowerCase().includes(input) ? '' : 'none';
+      });
+    }
+  </script>
 
   <footer>
     By: Gordon Liew
