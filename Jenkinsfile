@@ -36,6 +36,15 @@ pipeline {
             }
         }
 
+        stage('Zip Website Folder') {
+            steps {
+                sh '''
+                    rm -f website.zip
+                    zip -r website.zip website/
+                '''
+            }
+        }
+        
         stage('Ansible Deploy') {
             steps {
                 sh '''
