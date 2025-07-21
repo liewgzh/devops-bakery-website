@@ -67,6 +67,9 @@ EOF
 
                     ssh -i ~/.ssh/nodekey.pem -o StrictHostKeyChecking=no ubuntu@$CONTROLLER_IP << 'EOF'
                       sudo apt update
+                      sudo apt install -y software-properties-common
+                      sudo add-apt-repository --yes --update ppa:ansible/ansible
+                      sudo apt update
                       sudo apt install -y unzip ansible
 
                       mkdir -p ~/.ssh
