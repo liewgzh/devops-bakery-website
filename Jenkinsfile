@@ -87,7 +87,12 @@ EOF
             steps {
                 sh '''
                     NODE2_IP=$(terraform -chdir=terraform output -raw node2_public_ip)
-                    ssh -i ~/.ssh/nodekey.pem -o StrictHostKeyChecking=no ubuntu@$NODE2_IP "pgrep -x apache2"
+                    if ssh -i /var/lib/jenkins/.ssh/nodekey.pem -o StrictHostKeyChecking=no ubuntu@$NODE2_IP pgrep -x apache2 > /dev/null; then
+                        echo "✅ Apache2 process is running on $NODE2_IP"
+                    else
+                        echo "❌ Apache2 process is NOT running on $NODE2_IP"
+                        exit 1
+                    fi
                 '''
             }
         }
@@ -96,7 +101,13 @@ EOF
             steps {
                 sh '''
                     NODE2_IP=$(terraform -chdir=terraform output -raw node2_public_ip)
-                    curl -s -o /dev/null -w "%{http_code}" http://$NODE2_IP | grep 200
+                    STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://$NODE2_IP)
+                    if [ "$STATUS" -eq 200 ]; then
+                        echo "✅ Website is reachable at http://$NODE2_IP (HTTP 200)"
+                    else
+                        echo "❌ Website is NOT reachable at http://$NODE2_IP (status: $STATUS)"
+                        exit 1
+                    fi
                 '''
             }
         }
@@ -105,7 +116,12 @@ EOF
             steps {
                 sh '''
                     NODE2_IP=$(terraform -chdir=terraform output -raw node2_public_ip)
-                    ssh -i ~/.ssh/nodekey.pem -o StrictHostKeyChecking=no ubuntu@$NODE2_IP "systemctl is-active --quiet apache2"
+                    if ssh -i /var/lib/jenkins/.ssh/nodekey.pem -o StrictHostKeyChecking=no ubuntu@$NODE2_IP systemctl is-active --quiet apache2; then
+                        echo "✅ Apache2 service is active and running on $NODE2_IP"
+                    else
+                        echo "❌ Apache2 service is NOT running on $NODE2_IP"
+                        exit 1
+                    fi
                 '''
             }
         }
