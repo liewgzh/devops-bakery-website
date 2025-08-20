@@ -82,6 +82,33 @@ EOF
                 '''
             }
         }
+
+        stage('Test - Web Up') {
+            steps {
+                sh '''
+                    NODE2_IP=$(terraform -chdir=terraform output -raw node2_public_ip)
+                    ssh -i ~/.ssh/nodekey.pem -o StrictHostKeyChecking=no ubuntu@$NODE2_IP "pgrep -x apache2"
+                '''
+            }
+        }
+
+        stage('Test - Site Reachable') {
+            steps {
+                sh '''
+                    NODE2_IP=$(terraform -chdir=terraform output -raw node2_public_ip)
+                    curl -s -o /dev/null -w "%{http_code}" http://$NODE2_IP | grep 200
+                '''
+            }
+        }
+
+        stage('Test - Service Running') {
+            steps {
+                sh '''
+                    NODE2_IP=$(terraform -chdir=terraform output -raw node2_public_ip)
+                    ssh -i ~/.ssh/nodekey.pem -o StrictHostKeyChecking=no ubuntu@$NODE2_IP "systemctl is-active --quiet apache2"
+                '''
+            }
+        }
     }
 
     post {
