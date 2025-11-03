@@ -58,6 +58,16 @@ Ansible-Managed-Node-2 ansible_host=$NODE2_IP ansible_ssh_private_key_file=~/.ss
 [web:vars]
 ansible_user=ubuntu
 EOF
+                    echo "Waiting for control node SSH to become available..."
+                    for i in {1..10}; do
+                        if ssh -i ~/.ssh/nodekey.pem -o StrictHostKeyChecking=no -o ConnectTimeout=10 ubuntu@$CONTROLLER_IP 'echo SSH ready' 2>/dev/null; then
+                            echo "SSH connection established."
+                            break
+                        else
+                            echo "Retrying in 10s..."
+                            sleep 10
+                        fi
+                    done
 
                     scp -i ~/.ssh/nodekey.pem -o StrictHostKeyChecking=no website.zip ubuntu@$CONTROLLER_IP:~
                     scp -i ~/.ssh/nodekey.pem -o StrictHostKeyChecking=no ansible/inventory ubuntu@$CONTROLLER_IP:~
